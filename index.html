@@ -81,9 +81,9 @@
       }
       .project-copy { display: grid; align-content: start; gap: 14px; padding: 28px; min-width: 0; }
       .project-copy p { font-size: 16px; color: var(--muted); }
-      .project-copy ul { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; font-size: 15px; }
-      .project-copy li { padding-left: 18px; position: relative; }
-      .project-copy li::before {
+      .points { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; font-size: 15px; }
+      .points li { padding-left: 18px; position: relative; }
+      .points li::before {
         content: "";
         position: absolute;
         left: 0;
@@ -119,6 +119,14 @@
       .graph rect { fill: var(--node); stroke: var(--node-edge); stroke-width: 1.5; }
       .graph text { fill: #fff; font: 700 13px var(--font); text-anchor: middle; dominant-baseline: central; }
 
+      .entries { display: grid; gap: 32px; }
+      .entry { display: grid; gap: 8px; min-width: 0; }
+      .entry-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 2px 20px; }
+      .entry-head h3 { font-size: 20px; letter-spacing: -0.01em; }
+      .when { font: 500 13px/1.4 var(--mono); color: var(--muted); }
+      .role { font-size: 15px; font-weight: 700; color: var(--accent); }
+      .note { font-size: 15px; color: var(--muted); }
+
       footer { gap: 14px; padding-block: 28px 56px; border-top: 1px solid var(--line); }
       .links { display: flex; flex-wrap: wrap; gap: 8px 28px; margin: 0; padding: 0; list-style: none; font-weight: 700; }
       .links li { min-width: 0; overflow-wrap: anywhere; }
@@ -137,13 +145,50 @@
         <p class="lede">I'm a computer science sophomore at UT Dallas, passionate about machine learning, especially GenAI and ML research.</p>
       </section>
 
+      <section class="work" aria-labelledby="organizations-heading">
+        <h2 id="organizations-heading">Organizations</h2>
+        <div class="entries">
+          <article class="entry">
+            <div class="entry-head">
+              <h3>Artificial Intelligence Society at UTD</h3>
+              <p class="when">Sep 2026 – Present</p>
+            </div>
+            <p class="role">Apprentice, AI Mentorship Program</p>
+            <p class="note">Building Nabu, an AI-powered language learning platform, under two mentors. I'm working on a personal handwriting tutor.</p>
+            <ul class="points">
+              <li>Built a Python error detector that compares handwritten characters to references, using skeleton-based chamfer-distance matching with NumPy and SciPy</li>
+              <li>Exposed it and PaddleOCR features, including image-to-text and confidence scores, through a FastAPI REST API</li>
+              <li>Currently working on the front end</li>
+            </ul>
+          </article>
+          <article class="entry">
+            <div class="entry-head">
+              <h3>Nebula Labs</h3>
+              <p class="when">Sep 2026 – Present</p>
+            </div>
+            <p class="role">Engineer, Team Portfolio</p>
+            <ul class="points">
+              <li>Work on UTD Trends, a course planning website, primarily in React with JavaScript and TypeScript</li>
+              <li>Take issues and feature requests through GitHub, with code reviews and CI checks</li>
+            </ul>
+          </article>
+          <article class="entry">
+            <div class="entry-head">
+              <h3>Business Professionals of America</h3>
+              <p class="when">Oct 2022 – Mar 2023</p>
+            </div>
+            <p class="role">Member, Lone Star High School</p>
+          </article>
+        </div>
+      </section>
+
       <section class="work" aria-labelledby="project-heading">
         <h2 id="project-heading">Project</h2>
         <article class="project">
           <div class="project-copy">
             <h3>DevPath</h3>
             <p>Build coding roadmaps as a graph of topics, fill each topic with Codeforces problems, and track what you've solved.</p>
-            <ul>
+            <ul class="points">
               <li>Drag topics and link prerequisites on a pan-and-zoom board</li>
               <li>Add problems by pasting their links</li>
               <li>Sync a Codeforces handle to mark solved problems</li>
@@ -170,6 +215,43 @@
             </g>
           </svg>
         </article>
+      </section>
+
+      <section class="work" aria-labelledby="work-heading">
+        <h2 id="work-heading">Work</h2>
+        <div class="entries">
+          <article class="entry">
+            <div class="entry-head">
+              <h3>GradePower Learning Centers</h3>
+              <p class="when">Dec 2024 – May 2025</p>
+            </div>
+            <p class="role">Tutor, Frisco, TX</p>
+            <ul class="points">
+              <li>Helped 30+ students, tutoring 3-4 at a time in 2-hour sessions</li>
+              <li>Covered calculus I and II, high school sciences and English</li>
+            </ul>
+          </article>
+          <article class="entry">
+            <div class="entry-head">
+              <h3>Mathnasium</h3>
+              <p class="when">Sep 2024 – Dec 2024</p>
+            </div>
+            <p class="role">Online Tutor, Remote</p>
+            <ul class="points">
+              <li>Led online math sessions for 3-4 K-5 students at a time</li>
+            </ul>
+          </article>
+          <article class="entry">
+            <div class="entry-head">
+              <h3>Kumon</h3>
+              <p class="when">Jul 2024</p>
+            </div>
+            <p class="role">Teacher Assistant, Frisco, TX</p>
+            <ul class="points">
+              <li>Reviewed assignments and graded tests for elementary and middle school students</li>
+            </ul>
+          </article>
+        </div>
       </section>
     </main>
 

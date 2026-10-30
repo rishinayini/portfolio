@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Rishi Nayini</title>
+    <meta name="description" content="Rishi Nayini is a computer science sophomore at UT Dallas, passionate about machine learning and GenAI/ML research.">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%234a4d86'/%3E%3Ctext x='16' y='21' font-family='monospace' font-size='13' font-weight='700' fill='%23fff' text-anchor='middle'%3ERN%3C/text%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=Manrope:wght@500;600;700;800&display=swap">
+    <style>
+      /* Layout: one narrow column on DevPath's dotted board, with the project as the one set-apart object. */
+      :root {
+        color-scheme: dark;
+        --board: #1e1d22;
+        --dot: #2f2e37;
+        --surface: #232229;
+        --line: #34333e;
+        --text: #ececf2;
+        --muted: #a5a4b5;
+        --node: #4a4d86;
+        --node-edge: #6a6eb4;
+        --link: #6c6b74;
+        --accent: #a3a6f8;
+        --font: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+        --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+      }
+
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background-color: var(--board);
+        background-image: radial-gradient(var(--dot) 1px, transparent 1px);
+        background-size: 22px 22px;
+        color: var(--text);
+        font: 500 17px/1.65 var(--font);
+        -webkit-font-smoothing: antialiased;
+      }
+      a { color: var(--accent); text-underline-offset: 3px; }
+      a:hover { color: var(--text); }
+      :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+
+      main, footer {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        width: 100%;
+        max-width: 760px;
+        margin-inline: auto;
+        padding-left: max(20px, env(safe-area-inset-left, 0px));
+        padding-right: max(20px, env(safe-area-inset-right, 0px));
+      }
+      main { gap: 72px; padding-block: 96px 72px; }
+
+      h1, h2, h3, p { margin: 0; }
+      h1 {
+        font-size: clamp(44px, 9vw, 68px);
+        font-weight: 800;
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+      }
+      h2 {
+        font: 500 13px/1.4 var(--mono);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      h3 { font-size: 28px; font-weight: 800; line-height: 1.2; letter-spacing: -0.02em; }
+
+      .intro { display: grid; gap: 24px; }
+      .lede { max-width: 32em; font-size: clamp(20px, 3.4vw, 24px); line-height: 1.45; font-weight: 600; text-wrap: pretty; }
+
+      .work { display: grid; gap: 20px; }
+      .project {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        overflow: hidden;
+      }
+      .project-copy { display: grid; align-content: start; gap: 14px; padding: 28px; min-width: 0; }
+      .project-copy p { font-size: 16px; color: var(--muted); }
+      .project-copy ul { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; font-size: 15px; }
+      .project-copy li { padding-left: 18px; position: relative; }
+      .project-copy li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.62em;
+        width: 8px;
+        height: 8px;
+        border-radius: 2px;
+        background: var(--node);
+        border: 1px solid var(--node-edge);
+      }
+      .open {
+        justify-self: start;
+        margin-top: 6px;
+        padding: 9px 16px;
+        border-radius: 8px;
+        background: var(--accent);
+        color: #14142b;
+        font-size: 15px;
+        font-weight: 700;
+        text-decoration: none;
+      }
+      .open:hover { background: var(--text); color: #14142b; }
+
+      .graph {
+        display: block;
+        width: 100%;
+        height: 100%;
+        min-height: 280px;
+        background: var(--board);
+        border-left: 1px solid var(--line);
+      }
+      .graph path { fill: none; stroke: var(--link); stroke-width: 2; }
+      .graph rect { fill: var(--node); stroke: var(--node-edge); stroke-width: 1.5; }
+      .graph text { fill: #fff; font: 700 13px var(--font); text-anchor: middle; dominant-baseline: central; }
+
+      footer { gap: 14px; padding-block: 28px 56px; border-top: 1px solid var(--line); }
+      .links { display: flex; flex-wrap: wrap; gap: 8px 28px; margin: 0; padding: 0; list-style: none; font-weight: 700; }
+      .links li { min-width: 0; overflow-wrap: anywhere; }
+
+      @media (max-width: 680px) {
+        main { gap: 56px; padding-block: 64px 56px; }
+        .project { grid-template-columns: minmax(0, 1fr); }
+        .graph { height: auto; min-height: 0; border-left: 0; border-top: 1px solid var(--line); }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section class="intro">
+        <h1>Rishi Nayini</h1>
+        <p class="lede">I'm a computer science sophomore at UT Dallas, passionate about machine learning, especially GenAI and ML research.</p>
+      </section>
+
+      <section class="work" aria-labelledby="project-heading">
+        <h2 id="project-heading">Project</h2>
+        <article class="project">
+          <div class="project-copy">
+            <h3>DevPath</h3>
+            <p>Build coding roadmaps as a graph of topics, fill each topic with Codeforces problems, and track what you've solved.</p>
+            <ul>
+              <li>Drag topics and link prerequisites on a pan-and-zoom board</li>
+              <li>Add problems by pasting their links</li>
+              <li>Sync a Codeforces handle to mark solved problems</li>
+              <li>Plain HTML, CSS and JavaScript with no dependencies</li>
+            </ul>
+            <a class="open" href="./devpath/">Try DevPath</a>
+          </div>
+          <svg class="graph" viewBox="170 76 590 460" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Part of DevPath's example roadmap: Arrays and Hashing leads to Stack and Two Pointers, which lead on to Binary Search, Sliding Window, Linked List and Trees.">
+            <path d="M547 124C547 172 412 171 412 219"/>
+            <path d="M547 124C547 164 616 164 616 204"/>
+            <path d="M412 253C412 303 261 303 261 353"/>
+            <path d="M412 253C412 303 456 303 456 353"/>
+            <path d="M412 253C412 306 664 306 664 359"/>
+            <path d="M261 387C261 435 448 435 448 482"/>
+            <path d="M664 393C664 438 448 438 448 482"/>
+            <g>
+              <rect x="472" y="90" width="150" height="34" rx="8"/><text x="547" y="107">Arrays &amp; Hashing</text>
+              <rect x="556" y="204" width="120" height="34" rx="8"/><text x="616" y="221">Stack</text>
+              <rect x="347" y="219" width="130" height="34" rx="8"/><text x="412" y="236">Two Pointers</text>
+              <rect x="196" y="353" width="130" height="34" rx="8"/><text x="261" y="370">Binary Search</text>
+              <rect x="391" y="353" width="130" height="34" rx="8"/><text x="456" y="370">Sliding Window</text>
+              <rect x="604" y="359" width="120" height="34" rx="8"/><text x="664" y="376">Linked List</text>
+              <rect x="388" y="482" width="120" height="34" rx="8"/><text x="448" y="499">Trees</text>
+            </g>
+          </svg>
+        </article>
+      </section>
+    </main>
+
+    <footer>
+      <h2>Links</h2>
+      <ul class="links">
+        <li><a href="https://github.com/rishinayini">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/rishi-nayini/">LinkedIn</a></li>
+        <li><a href="https://devpost.com/nayini-rishi">Devpost</a></li>
+        <li><a href="mailto:nayini.rishi@gmail.com">nayini.rishi@gmail.com</a></li>
+      </ul>
+    </footer>
+  </body>
+</html>

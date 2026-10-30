@@ -22,6 +22,7 @@
         --node: #4a4d86;
         --node-edge: #6a6eb4;
         --link: #6c6b74;
+        --code: #3f3e4c;
         --accent: #a3a6f8;
         --font: 'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
         --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
@@ -41,7 +42,31 @@
       a:hover { color: var(--text); }
       :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
 
+      .code-bg {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        margin: 0;
+        padding: 24px 28px;
+        overflow: hidden;
+        pointer-events: none;
+        color: var(--code);
+        font: 500 14px/1.7 var(--mono);
+        white-space: pre;
+      }
+      .caret {
+        display: inline-block;
+        width: 8px;
+        height: 1.1em;
+        vertical-align: text-bottom;
+        background: var(--node-edge);
+        animation: blink 1s step-end infinite;
+      }
+      @keyframes blink { 50% { opacity: 0; } }
+
       main, footer {
+        position: relative;
+        z-index: 1;
         display: grid;
         grid-template-columns: minmax(0, 1fr);
         width: 100%;
@@ -105,7 +130,14 @@
         font-weight: 700;
         text-decoration: none;
       }
-      .open:hover { background: var(--text); color: #14142b; }
+      .open { transition: background-color 0.2s ease, transform 0.2s ease; }
+      .open:hover { background: var(--text); color: #14142b; transform: translateY(-2px); }
+
+      /* The script only sets .pending when motion is allowed, so the page is complete without it. */
+      .reveal {
+        transition: opacity 0.6s ease var(--d, 0ms), transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0ms);
+      }
+      .reveal.pending { opacity: 0; transform: translateY(16px); }
 
       .graph {
         display: block;
@@ -115,8 +147,22 @@
         background: var(--board);
         border-left: 1px solid var(--line);
       }
-      .graph path { fill: none; stroke: var(--link); stroke-width: 2; }
+      .graph path {
+        fill: none;
+        stroke: var(--link);
+        stroke-width: 2;
+        stroke-dasharray: 1;
+        stroke-dashoffset: 0;
+        transition: stroke-dashoffset 0.5s ease var(--d, 0ms);
+      }
       .graph rect { fill: var(--node); stroke: var(--node-edge); stroke-width: 1.5; }
+      .graph .node {
+        transform-box: fill-box;
+        transform-origin: center;
+        transition: opacity 0.35s ease var(--d, 0ms), transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.3) var(--d, 0ms);
+      }
+      .graph.pending path { stroke-dashoffset: 1; }
+      .graph.pending .node { opacity: 0; transform: scale(0.8); }
       .graph text { fill: #fff; font: 700 13px var(--font); text-anchor: middle; dominant-baseline: central; }
 
       .entries { display: grid; gap: 32px; }
@@ -131,6 +177,12 @@
       .links { display: flex; flex-wrap: wrap; gap: 8px 28px; margin: 0; padding: 0; list-style: none; font-weight: 700; }
       .links li { min-width: 0; overflow-wrap: anywhere; }
 
+      @media (prefers-reduced-motion: reduce) {
+        .open { transition: none; }
+        .open:hover { transform: none; }
+        .caret { animation: none; }
+      }
+
       @media (max-width: 680px) {
         main { gap: 56px; padding-block: 64px 56px; }
         .project { grid-template-columns: minmax(0, 1fr); }
@@ -139,6 +191,8 @@
     </style>
   </head>
   <body>
+    <pre class="code-bg" aria-hidden="true"><span id="typed"></span><span class="caret"></span></pre>
+
     <main>
       <section class="intro">
         <h1>Rishi Nayini</h1>
@@ -197,22 +251,20 @@
             <a class="open" href="./devpath/">Try DevPath</a>
           </div>
           <svg class="graph" viewBox="170 76 590 460" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Part of DevPath's example roadmap: Arrays and Hashing leads to Stack and Two Pointers, which lead on to Binary Search, Sliding Window, Linked List and Trees.">
-            <path d="M547 124C547 172 412 171 412 219"/>
-            <path d="M547 124C547 164 616 164 616 204"/>
-            <path d="M412 253C412 303 261 303 261 353"/>
-            <path d="M412 253C412 303 456 303 456 353"/>
-            <path d="M412 253C412 306 664 306 664 359"/>
-            <path d="M261 387C261 435 448 435 448 482"/>
-            <path d="M664 393C664 438 448 438 448 482"/>
-            <g>
-              <rect x="472" y="90" width="150" height="34" rx="8"/><text x="547" y="107">Arrays &amp; Hashing</text>
-              <rect x="556" y="204" width="120" height="34" rx="8"/><text x="616" y="221">Stack</text>
-              <rect x="347" y="219" width="130" height="34" rx="8"/><text x="412" y="236">Two Pointers</text>
-              <rect x="196" y="353" width="130" height="34" rx="8"/><text x="261" y="370">Binary Search</text>
-              <rect x="391" y="353" width="130" height="34" rx="8"/><text x="456" y="370">Sliding Window</text>
-              <rect x="604" y="359" width="120" height="34" rx="8"/><text x="664" y="376">Linked List</text>
-              <rect x="388" y="482" width="120" height="34" rx="8"/><text x="448" y="499">Trees</text>
-            </g>
+            <path pathLength="1" style="--d:150ms" d="M547 124C547 172 412 171 412 219"/>
+            <path pathLength="1" style="--d:150ms" d="M547 124C547 164 616 164 616 204"/>
+            <path pathLength="1" style="--d:700ms" d="M412 253C412 303 261 303 261 353"/>
+            <path pathLength="1" style="--d:700ms" d="M412 253C412 303 456 303 456 353"/>
+            <path pathLength="1" style="--d:700ms" d="M412 253C412 306 664 306 664 359"/>
+            <path pathLength="1" style="--d:1250ms" d="M261 387C261 435 448 435 448 482"/>
+            <path pathLength="1" style="--d:1250ms" d="M664 393C664 438 448 438 448 482"/>
+            <g class="node"><rect x="472" y="90" width="150" height="34" rx="8"/><text x="547" y="107">Arrays &amp; Hashing</text></g>
+            <g class="node" style="--d:550ms"><rect x="556" y="204" width="120" height="34" rx="8"/><text x="616" y="221">Stack</text></g>
+            <g class="node" style="--d:550ms"><rect x="347" y="219" width="130" height="34" rx="8"/><text x="412" y="236">Two Pointers</text></g>
+            <g class="node" style="--d:1100ms"><rect x="196" y="353" width="130" height="34" rx="8"/><text x="261" y="370">Binary Search</text></g>
+            <g class="node" style="--d:1100ms"><rect x="391" y="353" width="130" height="34" rx="8"/><text x="456" y="370">Sliding Window</text></g>
+            <g class="node" style="--d:1100ms"><rect x="604" y="359" width="120" height="34" rx="8"/><text x="664" y="376">Linked List</text></g>
+            <g class="node" style="--d:1650ms"><rect x="388" y="482" width="120" height="34" rx="8"/><text x="448" y="499">Trees</text></g>
           </svg>
         </article>
       </section>
@@ -264,5 +316,89 @@
         <li><a href="mailto:nayini.rishi@gmail.com">nayini.rishi@gmail.com</a></li>
       </ul>
     </footer>
+
+    <script>
+      const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      const snippets = [
+`import numpy as np
+from scipy.spatial import cKDTree
+
+def chamfer_distance(a, b):
+    d_ab, _ = cKDTree(b).query(a)
+    d_ba, _ = cKDTree(a).query(b)
+    return d_ab.mean() + d_ba.mean()
+`,
+`import torch
+import torch.nn.functional as F
+
+def attention(q, k, v):
+    scores = q @ k.transpose(-2, -1) / k.size(-1) ** 0.5
+    return F.softmax(scores, dim=-1) @ v
+`,
+`for epoch in range(epochs):
+    for x, y in loader:
+        loss = F.cross_entropy(model(x), y)
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+    print(f"epoch {epoch}: loss {loss.item():.4f}")
+`,
+      ];
+
+      const typed = document.getElementById('typed');
+      if (reducedMotion) {
+        typed.textContent = snippets.join('\n');
+      } else {
+        let text = '';
+        let snippet = 0;
+        let char = 0;
+
+        const type = () => {
+          const source = snippets[snippet];
+          const next = source[char++];
+          text += next;
+
+          // Only keep the lines that fit, so old code scrolls off the top.
+          const maxLines = Math.max(4, Math.floor((innerHeight - 48) / 24) - 1);
+          const lines = text.split('\n');
+          if (lines.length > maxLines) text = lines.slice(-maxLines).join('\n');
+          typed.textContent = text;
+
+          if (char < source.length) {
+            setTimeout(type, next === '\n' ? 220 : 25 + Math.random() * 45);
+            return;
+          }
+          text += '\n';
+          snippet = (snippet + 1) % snippets.length;
+          char = 0;
+          setTimeout(type, 1200);
+        };
+        type();
+      }
+
+      if ('IntersectionObserver' in window && !reducedMotion) {
+        const reveals = document.querySelectorAll('h1, .lede, h2, .project, .entry, .links');
+        reveals.forEach((el) => el.classList.add('reveal', 'pending'));
+
+        const revealObserver = new IntersectionObserver((seen) => {
+          seen.filter((e) => e.isIntersecting).forEach((e, i) => {
+            e.target.style.setProperty('--d', `${i * 90}ms`);
+            e.target.classList.remove('pending');
+            revealObserver.unobserve(e.target);
+          });
+        }, { threshold: 0.1 });
+        reveals.forEach((el) => revealObserver.observe(el));
+
+        const graph = document.querySelector('.graph');
+        graph.classList.add('pending');
+        const graphObserver = new IntersectionObserver(([e]) => {
+          if (!e.isIntersecting) return;
+          graph.classList.remove('pending');
+          graphObserver.disconnect();
+        }, { threshold: 0.4 });
+        graphObserver.observe(graph);
+      }
+    </script>
   </body>
 </html>
